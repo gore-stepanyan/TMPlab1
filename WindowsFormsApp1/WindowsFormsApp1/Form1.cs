@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,20 +16,63 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
-            random_flag.Checked = true;
+            CreateFile(500);
         }
-
-        private void Random_flag_CheckedChanged(object sender, EventArgs e)
+        private string CreateFile(int Size)
         {
-            textBox1.Enabled = random_flag.Checked;
+            string path;
+            using (SaveFileDialog SFD = new SaveFileDialog())
+            {
+                path = DateTime.Now.ToString("dd-MM-yyy-HH-mm") + ".dat";
+            }
+
+            using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+            {
+                int countOfPage = Convert.ToInt32(Math.Ceiling(Size/128.0));
+
+                int I = 0;  //количество сгенерированных элеменов
+                Random random = new Random();
+
+                for (int m = 0; m < countOfPage - 1; m++)
+                {
+                    for(int k = 0; k < 128; k++)
+                        writer.Write(true);
+
+                    for(int k = 0; k < 128; k++)
+                    {
+                        writer.Write(random.Next());
+                        I++;
+                    }
+                }
+
+                int J = I;
+                for (int j = J; j < Size - 1; j++)
+                {
+                    writer.Write(true);
+                    J = j;
+                }
+                for (int j = J; j < 128; j++)
+                {
+                    writer.Write(false);
+                    J = j;
+                }
+                for (int i = I; i < Size; i++)
+                {
+                    writer.Write(random.Next());
+                }
+            }
+
+            return path;
         }
 
         private void Read_btn_Click(object sender, EventArgs e)
         {
-            string path;
-            using (OpenFileDialog OFD = new OpenFileDialog())
-                if (OFD.ShowDialog() == DialogResult.OK)
-                    path = OFD.FileName;
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
