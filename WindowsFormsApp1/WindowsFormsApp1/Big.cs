@@ -10,27 +10,25 @@ namespace WindowsFormsApp1
     class Big
     {
         private string FileName;
-        private int Size;
-        private int Value;
         private int Index;
-        private int PageNum = 0; 
-        private int[] Arr = new int[128];
-        private bool[] BMap = new bool[128];
+        private int BlockSize;
+        private int PageNum = 0;
+        private int[] Arr;
+        private bool[] BMap;
 
-        public Big(string FileName, int Size)
+        public Big(int BlockSize)
         {
-            this.FileName = FileName;
-            this.Size = Size;
+            this.BlockSize = BlockSize;
+            Arr = new int[BlockSize];
+            BMap = new bool[BlockSize];
         }
-        //перед блоком карта на 128Б
-        //блоки по 512Б = 128 чисел
 
         public void ReadPage(int index) //    определяет номер страницы и номер на странице, на которой находится требуемый элемент;
         {
             int pageNum = 1;
-            while (index  - 128 >= 0)
+            while (index  - BlockSize >= 0)
             {
-                index -= 128;
+                index -= BlockSize;
                 pageNum++;
             }
             Index = index;
@@ -39,18 +37,16 @@ namespace WindowsFormsApp1
                 return;
             else PageNum = pageNum;
 
+
             using (BinaryReader reader = new BinaryReader(File.Open(FileName, FileMode.Open)))
             {
-                for (int i = 0; i < PageNum; i++)
-                {
-                    for (int j = 0; j < 40; j++)
-                        reader.ReadDecimal();
-                }
 
-                for (int i = 0; i < 128; i++)
+                reader.Read(new byte[(sizeof(bool)* BMap.Count() + sizeof(int)*Arr.Count()) * (PageNum - 1)], 0, (sizeof(bool) * BMap.Count() + sizeof(int) * Arr.Count()) * (PageNum - 1));
+
+                for (int i = 0; i < BlockSize; i++)
                     BMap[i] = reader.ReadBoolean();
 
-                for (int i = 0; i < 128; i++)
+                for (int i = 0; i < BlockSize; i++)
                 {
                     if (BMap[i] == true)
                         Arr[i] = reader.ReadInt32();
@@ -58,8 +54,11 @@ namespace WindowsFormsApp1
                 }            
             }
         }
-        public int ReadElement(int index)
+        public int ReadElement(int index, string fileName)
         {
+            if (fileName != FileName)
+                FileName = fileName;
+
             ReadPage(index);
 
             if (BMap[Index] == false)
@@ -68,21 +67,29 @@ namespace WindowsFormsApp1
                 return Arr[Index];
         }
 
-        public void WriteElement(int element, int index)
+        public void WriteElement(int element, int index, string fileName)
         {
+            if (fileName != FileName)
+                FileName = fileName;
             ReadPage(index);
 
             Arr[Index] = element;
             BMap[Index] = true;
 
+            using (BinaryWriter writer = new BinaryWriter(File.Open(FileName, FileMode.Open)))
+            {
+
+                writer.Seek(640 * (PageNum - 1), 0);
+
+                for (int i = 0; i < BlockSize; i++)
+                    writer.Write(BMap[i]); 
+
+                for (int i = 0; i < BlockSize; i++)
+                {
+                    writer.Write(Arr[i]);
+                }
+            }
+
         }
-/*
-    метод записи заданного значения в элемент массива с указанным индексом
-    {
-        вычисляет адрес элемента;
-        записывает значение по этому адресу;
-        возвращает результат завершения операции
-    };
-    */
-}
+    }
 }
