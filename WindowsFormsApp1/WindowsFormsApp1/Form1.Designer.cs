@@ -34,6 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.reader = new System.Windows.Forms.TabPage();
+            this.Remove = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.Write_btn = new System.Windows.Forms.Button();
             this.result = new System.Windows.Forms.Label();
@@ -55,7 +56,7 @@
             this.tabControl1.Location = new System.Drawing.Point(1, 1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(218, 144);
+            this.tabControl1.Size = new System.Drawing.Size(256, 144);
             this.tabControl1.TabIndex = 1;
             // 
             // writer
@@ -66,7 +67,7 @@
             this.writer.Location = new System.Drawing.Point(4, 22);
             this.writer.Name = "writer";
             this.writer.Padding = new System.Windows.Forms.Padding(3);
-            this.writer.Size = new System.Drawing.Size(210, 118);
+            this.writer.Size = new System.Drawing.Size(248, 118);
             this.writer.TabIndex = 0;
             this.writer.Text = "Создание";
             this.writer.UseVisualStyleBackColor = true;
@@ -100,6 +101,7 @@
             // 
             // reader
             // 
+            this.reader.Controls.Add(this.Remove);
             this.reader.Controls.Add(this.label3);
             this.reader.Controls.Add(this.Write_btn);
             this.reader.Controls.Add(this.result);
@@ -109,10 +111,20 @@
             this.reader.Location = new System.Drawing.Point(4, 22);
             this.reader.Name = "reader";
             this.reader.Padding = new System.Windows.Forms.Padding(3);
-            this.reader.Size = new System.Drawing.Size(210, 118);
+            this.reader.Size = new System.Drawing.Size(248, 118);
             this.reader.TabIndex = 1;
             this.reader.Text = "Поиск";
             this.reader.UseVisualStyleBackColor = true;
+            // 
+            // Remove
+            // 
+            this.Remove.Location = new System.Drawing.Point(167, 89);
+            this.Remove.Name = "Remove";
+            this.Remove.Size = new System.Drawing.Size(75, 23);
+            this.Remove.TabIndex = 6;
+            this.Remove.Text = "Удалить";
+            this.Remove.UseVisualStyleBackColor = true;
+            this.Remove.Click += new System.EventHandler(this.Remove_Click);
             // 
             // label3
             // 
@@ -126,7 +138,7 @@
             // Write_btn
             // 
             this.Write_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Write_btn.Location = new System.Drawing.Point(129, 89);
+            this.Write_btn.Location = new System.Drawing.Point(88, 88);
             this.Write_btn.Name = "Write_btn";
             this.Write_btn.Size = new System.Drawing.Size(75, 23);
             this.Write_btn.TabIndex = 3;
@@ -175,7 +187,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(224, 146);
+            this.ClientSize = new System.Drawing.Size(262, 146);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "TaMP1";
@@ -201,6 +213,7 @@
         private System.Windows.Forms.Label result;
         private System.Windows.Forms.Button Start;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button Remove;
     }
 }
 

@@ -127,7 +127,19 @@ namespace WindowsFormsApp1
 
             WriteForm writeForm = new WriteForm();
             writeForm.ShowDialog();
-            BigArray.WriteElement(writeForm.Value, index, Path);
+            BigArray.SetElement(writeForm.Value, index, Path);
+        }
+
+        private void Remove_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(IndexTextBox.Text, out index))
+            {
+                MessageBox.Show("Ошибка, введено нецелое или отрицательное число", "Ошибка!");
+                IndexTextBox.Clear();
+                return;
+            }
+            BigArray.RemoveAt(index, Path);
+            label3.Text = "Элемент удален!";
         }
 
         private void Start_Click(object sender, EventArgs e)

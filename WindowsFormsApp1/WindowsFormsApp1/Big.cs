@@ -67,7 +67,23 @@ namespace WindowsFormsApp1
                 return Arr[Index];
         }
 
-        public void WriteElement(int element, int index, string fileName)
+        private void Write()
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open(FileName, FileMode.Open)))
+            {
+
+                writer.Seek((sizeof(bool) * BMap.Count() + sizeof(int) * Arr.Count()) * (PageNum - 1), 0);
+
+                for (int i = 0; i < BlockSize; i++)
+                    writer.Write(BMap[i]);
+
+                for (int i = 0; i < BlockSize; i++)
+                {
+                    writer.Write(Arr[i]);
+                }
+            }
+        }
+        public void SetElement(int element, int index, string fileName)
         {
             if (fileName != FileName)
                 FileName = fileName;
@@ -76,20 +92,18 @@ namespace WindowsFormsApp1
             Arr[Index] = element;
             BMap[Index] = true;
 
-            using (BinaryWriter writer = new BinaryWriter(File.Open(FileName, FileMode.Open)))
-            {
+            Write();
 
-                writer.Seek(640 * (PageNum - 1), 0);
+        }
+        public void RemoveAt(int index, string fileName)
+        {
+            if (fileName != FileName)
+                FileName = fileName;
+            ReadPage(index);
 
-                for (int i = 0; i < BlockSize; i++)
-                    writer.Write(BMap[i]); 
+            BMap[Index] = false;
 
-                for (int i = 0; i < BlockSize; i++)
-                {
-                    writer.Write(Arr[i]);
-                }
-            }
-
+            Write();
         }
     }
 }
