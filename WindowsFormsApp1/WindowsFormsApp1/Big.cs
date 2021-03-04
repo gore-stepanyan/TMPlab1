@@ -75,7 +75,9 @@ namespace WindowsFormsApp1
                 writer.Seek((sizeof(bool) * BMap.Count() + sizeof(int) * Arr.Count()) * (PageNum - 1), 0);
 
                 for (int i = 0; i < BlockSize; i++)
+                {
                     writer.Write(BMap[i]);
+                }
 
                 for (int i = 0; i < BlockSize; i++)
                 {

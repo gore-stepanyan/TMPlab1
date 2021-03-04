@@ -189,6 +189,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(262, 146);
             this.Controls.Add(this.tabControl1);
+            this.MaximumSize = new System.Drawing.Size(278, 185);
+            this.MinimumSize = new System.Drawing.Size(278, 185);
             this.Name = "Form1";
             this.Text = "TaMP1";
             this.tabControl1.ResumeLayout(false);
