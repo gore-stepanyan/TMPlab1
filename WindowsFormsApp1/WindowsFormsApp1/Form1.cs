@@ -15,7 +15,7 @@ namespace WindowsFormsApp1
     {
         private int N, index;
         private static int BlockSize = 512 / sizeof(int);
-        private Big BigArray = new Big(BlockSize);
+        private Big BigArray;
         string Path;
 
         public Form1()
@@ -28,6 +28,9 @@ namespace WindowsFormsApp1
             string path;            
             using (SaveFileDialog SFD = new SaveFileDialog())
             {
+                SFD.DefaultExt = "dat";
+                SFD.Filter =
+                "Hype files (*.dat)|*.dat|All files (*.*)|*.*";
                 if (SFD.ShowDialog() == DialogResult.OK)
                 {
                     path = SFD.FileName;
@@ -75,24 +78,23 @@ namespace WindowsFormsApp1
         {
             if (!int.TryParse(IndexTextBox.Text, out index))
             {
-                MessageBox.Show("Ошибка, введено нецелое или отрицательное число", "Ошибка!");
-                textBox1.Clear();
+                MessageBox.Show("Введено некорректное значение", "Ошибка!");
+                IndexTextBox.Clear();
+                label3.Text = "Найденый элемент: ";
+                return;
+            }
+            if(index < 0)
+            {
+                MessageBox.Show("Введено некорректное значение", "Ошибка!");
+                IndexTextBox.Clear();
+                label3.Text = "Найденый элемент: ";
                 return;
             }
 
-            
-            using (OpenFileDialog OFD = new OpenFileDialog())
-            {
-                if (OFD.ShowDialog() == DialogResult.OK)
-                {
-                    Path = OFD.FileName;
-                }
-                else 
-                    return;
-            }
             try
             {
-                label3.Text = "Найденый элемент: " + BigArray.ReadElement(index, Path);
+                label3.Text = "Найденый элемент: " + BigArray.ReadElement(index);
+                PageNumLabel.Text = "Номер загруженной страницы: " + BigArray.GetPageNum().ToString();
             }
             catch (Exception E)
             {
@@ -103,17 +105,7 @@ namespace WindowsFormsApp1
                 MessageBoxIcon.Warning);
                 textBox1.Clear();
             }
-            
-        }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            
-            if (!int.TryParse(textBox1.Text, out N))
-            {
-                MessageBox.Show("Ошибка, введено нецелое или отрицательное число", "Ошибка!");
-                textBox1.Clear();
-            }
         }
 
         private void Write_btn_Click(object sender, EventArgs e)
@@ -127,7 +119,9 @@ namespace WindowsFormsApp1
 
             WriteForm writeForm = new WriteForm();
             writeForm.ShowDialog();
-            BigArray.SetElement(writeForm.Value, index, Path);
+            BigArray.SetElement(writeForm.Value, index);
+
+            label3.Text = "Найденый элемент: " + BigArray.ReadElement(index);
         }
 
         private void Remove_Click(object sender, EventArgs e)
@@ -142,10 +136,42 @@ namespace WindowsFormsApp1
             label3.Text = "Элемент удален!";
         }
 
+        private void Open_Click(object sender, EventArgs e)
+        {
+            string Path;
+
+            using (OpenFileDialog OFD = new OpenFileDialog())
+            {
+                if (OFD.ShowDialog() == DialogResult.OK)
+                {
+                    Path = OFD.FileName;
+                }
+                else
+                    return;
+            }
+            BigArray = new Big(BlockSize, Path);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void Start_Click(object sender, EventArgs e)
         {
-            CreateFile(N, 512 / sizeof(int));
-
+            if (!int.TryParse(textBox1.Text, out N))
+            {
+                MessageBox.Show("Введено некорректное значение", "Ошибка!");
+                textBox1.Clear();
+                return;
+            }
+            if(N <= 0)
+            {
+                MessageBox.Show("Введено некорректное значение", "Ошибка!");
+                textBox1.Clear();
+                return;
+            }
+            BigArray = new Big(BlockSize, CreateFile(N, 512 / sizeof(int)));
         }
     }
 }

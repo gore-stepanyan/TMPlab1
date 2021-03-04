@@ -16,11 +16,17 @@ namespace WindowsFormsApp1
         private int[] Arr;
         private bool[] BMap;
 
-        public Big(int BlockSize)
+        public Big(int BlockSize, string FileName="default.bin")
         {
+            this.FileName = FileName;
             this.BlockSize = BlockSize;
             Arr = new int[BlockSize];
             BMap = new bool[BlockSize];
+        }
+        
+        public int GetPageNum()
+        {
+            return PageNum;
         }
 
         public void ReadPage(int index) //    определяет номер страницы и номер на странице, на которой находится требуемый элемент;
@@ -54,11 +60,8 @@ namespace WindowsFormsApp1
                 }            
             }
         }
-        public int ReadElement(int index, string fileName)
+        public int ReadElement(int index)
         {
-            if (fileName != FileName)
-                FileName = fileName;
-
             ReadPage(index);
 
             if (BMap[Index] == false)
@@ -85,10 +88,8 @@ namespace WindowsFormsApp1
                 }
             }
         }
-        public void SetElement(int element, int index, string fileName)
+        public void SetElement(int element, int index)
         {
-            if (fileName != FileName)
-                FileName = fileName;
             ReadPage(index);
 
             Arr[Index] = element;
@@ -99,8 +100,6 @@ namespace WindowsFormsApp1
         }
         public void RemoveAt(int index, string fileName)
         {
-            if (fileName != FileName)
-                FileName = fileName;
             ReadPage(index);
 
             BMap[Index] = false;
