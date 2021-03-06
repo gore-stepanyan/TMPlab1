@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class Form1 : Form
+    public partial class Form1: Form
     {
         private int N, index;
         private static int BlockSize = 512 / sizeof(int);
@@ -43,7 +43,8 @@ namespace WindowsFormsApp1
             {
                 int countOfPage = Convert.ToInt32(Math.Ceiling(Size/128.0));
 
-                int I = 0;  //количество сгенерированных элеменов
+                // Rоличество сгенерированных элеменов
+                int I = 0;  
                 Random random = new Random();
 
                 for (int m = 0; m < countOfPage - 1; m++)

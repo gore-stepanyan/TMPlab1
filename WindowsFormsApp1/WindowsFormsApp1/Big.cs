@@ -16,6 +16,7 @@ namespace WindowsFormsApp1
         private int[] Arr;
         private bool[] BMap;
 
+        // Конструктор с параметрами
         public Big(int BlockSize, string FileName="default.bin")
         {
             this.FileName = FileName;
@@ -24,12 +25,14 @@ namespace WindowsFormsApp1
             BMap = new bool[BlockSize];
         }
         
+        // Вернуть номер страницы
         public int GetPageNum()
         {
             return PageNum;
         }
 
-        public void ReadPage(int index) //    определяет номер страницы и номер на странице, на которой находится требуемый элемент;
+        // Считать страницу: определить номер страницы и номер на странице, на которой находится требуемый элемент;
+        public void ReadPage(int index) 
         {
             int pageNum = 1;
             while (index  - BlockSize >= 0)
@@ -46,7 +49,7 @@ namespace WindowsFormsApp1
 
             using (BinaryReader reader = new BinaryReader(File.Open(FileName, FileMode.Open)))
             {
-
+                // Считывание страницы в буферный массив
                 reader.Read(new byte[(sizeof(bool)* BMap.Count() + sizeof(int)*Arr.Count()) * (PageNum - 1)], 0, (sizeof(bool) * BMap.Count() + sizeof(int) * Arr.Count()) * (PageNum - 1));
 
                 for (int i = 0; i < BlockSize; i++)
@@ -60,6 +63,8 @@ namespace WindowsFormsApp1
                 }            
             }
         }
+
+        // Считать элемент: вернуть по индексу
         public int ReadElement(int index)
         {
             ReadPage(index);
@@ -70,6 +75,7 @@ namespace WindowsFormsApp1
                 return Arr[Index];
         }
 
+        // Перезаписать страницу
         private void Write()
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(FileName, FileMode.Open)))
@@ -88,6 +94,8 @@ namespace WindowsFormsApp1
                 }
             }
         }
+
+        // Перезаписать элемент
         public void SetElement(int element, int index)
         {
             ReadPage(index);
@@ -98,6 +106,8 @@ namespace WindowsFormsApp1
             Write();
 
         }
+
+        // Удалить элемент
         public void RemoveAt(int index, string fileName)
         {
             ReadPage(index);
