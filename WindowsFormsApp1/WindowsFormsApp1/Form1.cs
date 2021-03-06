@@ -43,7 +43,7 @@ namespace WindowsFormsApp1
             {
                 int countOfPage = Convert.ToInt32(Math.Ceiling(Size/128.0));
 
-                // Rоличество сгенерированных элеменов
+                // Количество сгенерированных элеменов
                 int I = 0;  
                 Random random = new Random();
 
